@@ -1,3 +1,4 @@
 sass -v 3.3.8
 haml -v 4.0.5
 clap -v 1.0.0
+rb-fsevent -v 0.9.4

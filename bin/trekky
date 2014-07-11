@@ -1,17 +1,24 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.unshift File.join(Dir.pwd, 'lib')
 require 'clap'
-require 'trekky/runner'
+require 'trekky/processor'
+require 'trekky/daemon'
 
 source = 'source'
 target = 'public'
+daemon = false
 
 Clap.run ARGV, 
   "-s" => lambda {|s| source = s },
   "-t" => lambda {|t| target = t },
+  "-d" => lambda { daemon = true },
   "-h" => lambda {
     puts "usage: trekky [-h] [-s source] [-t target]"
     exit
   }
 
-Trekky::Runner.new(source, target).run
+if daemon 
+  Trekky::Daemon.run source, target
+else
+  Trekky::Processor.run source, target
+end
