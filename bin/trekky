@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+require 'clap'
+require_relative '../lib/trekky/compile'
+
+source = 'source'
+target = 'public'
+
+Clap.run ARGV, 
+  "-s" => lambda {|s| source = s },
+  "-t" => lambda {|t| target = t },
+  "-h" => lambda {
+    puts "usage: trekky [-h] [-s source] [-t target]"
+    exit
+  }
+
+Trekky::Compile.new(source, target).run
