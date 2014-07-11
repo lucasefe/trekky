@@ -4,6 +4,20 @@ require 'haml'
 module Trekky
   class HamlParser < Parser
 
+    def output
+      if layout?
+        render(layout_contents) { render(input) }
+      else
+        render(input)
+      end
+    end
+
+    private
+
+    def layout_contents
+      File.read(layout)
+    end
+
     def layout?
       File.exists?(layout)
     end
@@ -12,21 +26,11 @@ module Trekky
       File.join(source_dir, "layouts", "#{name}.haml")
     end
 
-    def run
-      prepare('haml', 'html') do
-        if layout?
-          render(layout) { render(source) }
-        else
-          render(source)
-        end
-      end
-    end
-
-    def render(source, &block)
+    def render(input, &block)
       if block_given?
-        Haml::Engine.new(File.read(source)).render(&block)
+        Haml::Engine.new(input).render(&block)
       else
-        Haml::Engine.new(File.read(source)).render
+        Haml::Engine.new(input).render
       end
     end
   end

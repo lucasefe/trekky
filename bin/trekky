@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.unshift File.join(Dir.pwd, 'lib')
 require 'clap'
-require_relative '../lib/trekky/compile'
+require 'trekky/runner'
 
 source = 'source'
 target = 'public'
@@ -14,4 +14,4 @@ Clap.run ARGV,
     exit
   }
 
-Trekky::Compile.new(source, target).run
+Trekky::Runner.new(source, target).run
