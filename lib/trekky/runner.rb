@@ -29,6 +29,7 @@ module Trekky
         else
           input
         end
+        STDOUT.puts "-> #{source} to #{target}"
         write output, target
       end
     end
