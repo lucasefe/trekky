@@ -1,7 +1,8 @@
-require 'haml'
-require 'sass'
+require 'trekky/haml_parser'
+require 'trekky/sass_parser'
 
 module Trekky
+
   class Compile
 
     attr_reader :source_dir, :target_dir
@@ -23,30 +24,15 @@ module Trekky
     private
 
     def haml(source)
-      prepare(source, 'haml', 'html') do |f|
-        f.write Haml::Engine.new(File.read(source)).render
-      end
+      HamlParser.new(source, source_dir, target_dir).render
     end
 
     def sass(source)
-      prepare(source, 'sass', 'css') do |f|
-        f.write Sass::Engine.new(File.read(source), :syntax => :sass).render
-      end
+      SassParser.new(source, source_dir, target_dir).render
     end
 
     def all_files
       Dir.glob(File.join(source_dir, "**/*"))
-    end
-
-    def prepare(source, type, extension)
-      target = source.gsub(source_dir, target_dir).gsub(/\.#{type}/, '')
-      if File.extname(target) == ''
-        target += ".#{extension}"
-      end
-      puts "Compiling #{source} to #{target} with #{type.upcase}"
-      File.open(target, 'w') do |f|
-        yield(f)
-      end
     end
 
   end

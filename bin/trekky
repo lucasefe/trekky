@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+$LOAD_PATH.unshift File.join(Dir.pwd, 'lib')
 require 'clap'
 require_relative '../lib/trekky/compile'
 
