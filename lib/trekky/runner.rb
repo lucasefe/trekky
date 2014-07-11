@@ -42,8 +42,10 @@ module Trekky
 
     def default_sources
       Dir.glob(File.join(source_dir, "**/*")).
-        reject { |p| p.include?("#{source_dir}/layouts") }.
-        reject { |p| File.directory?(p) }
+        reject do |p|
+          p.include?("#{source_dir}/layouts") ||
+          File.directory?(p)
+        end
     end
 
   end
