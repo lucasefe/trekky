@@ -13,17 +13,21 @@ module Trekky
     end
 
     def run
-      prepare('haml', 'html') do |f|
-        out = if layout?
-          Haml::Engine.new(File.read(layout)).render do
-            Haml::Engine.new(File.read(source)).render
-          end
+      prepare('haml', 'html') do
+        if layout?
+          render(layout) { render(source) }
         else
-          Haml::Engine.new(File.read(source)).render
+          render(source)
         end
-        f.write out
       end
     end
 
+    def render(source, &block)
+      if block_given?
+        Haml::Engine.new(File.read(source)).render(&block)
+      else
+        Haml::Engine.new(File.read(source)).render
+      end
+    end
   end
 end

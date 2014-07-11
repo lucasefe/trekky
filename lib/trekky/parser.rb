@@ -21,7 +21,7 @@ module Trekky
       end
       puts "Compiling #{source} to #{target} with #{type.upcase}"
       File.open(target, 'w') do |f|
-        yield(f)
+        f.write(yield)
       end
     end
 
