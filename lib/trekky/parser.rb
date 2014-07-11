@@ -1,11 +1,11 @@
 module Trekky
   class Parser
-    attr_reader :input, :source_dir, :target_dir
 
-    def initialize(input, source_dir, target_dir)
+    attr_reader :input, :context
+
+    def initialize(input, context)
       @input = input
-      @source_dir = source_dir
-      @target_dir = target_dir
+      @context = context
     end
 
     def output

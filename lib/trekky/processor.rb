@@ -6,25 +6,20 @@ module Trekky
 
   class Processor
 
-    attr_reader :source_dir, :target_dir
-
     PARSERS = {
       :sass => SassParser,
       :haml => HamlParser
     }
 
-    def self.run(source_dir, target_dir)
-      new(source_dir, target_dir).run
-    end
+    attr_reader :context
 
-    def initialize(source_dir, target_dir)
-      @source_dir = source_dir
-      @target_dir = target_dir
+    def initialize(context)
+      @context = context
     end
 
     def run(sources = default_sources)
       sources.each do |source|
-        target = source.gsub(source_dir, target_dir)
+        target = source.gsub(context.source_dir, context.target_dir)
         extension = File.extname(source)[1..-1].intern
         output = if parser = PARSERS[extension]
           target.gsub!(/\.#{extension}/, '')
@@ -48,7 +43,7 @@ module Trekky
 
     def parse(parser, source)
       input = File.read(source)
-      parser.new(input, source_dir, target_dir).output
+      parser.new(input, context).output
     rescue Exception => e
       STDERR.puts "Error #{e.message}"
       e.backtrace.each do |line|
@@ -58,9 +53,9 @@ module Trekky
     end
 
     def default_sources
-      Dir.glob(File.join(source_dir, "**/*")).
+      Dir.glob(File.join(context.source_dir, "**/*")).
         reject do |p|
-          p.include?("#{source_dir}/layouts") ||
+          p.include?("#{context.source_dir}/layouts") ||
           File.directory?(p)
         end
     end

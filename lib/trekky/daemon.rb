@@ -4,20 +4,17 @@ require 'trekky/processor'
 module Trekky
   class Daemon
 
-    def self.run(source_dir, target_dir)
-      new(source_dir, target_dir).run
-    end
+    attr_reader :context
 
-    def initialize(source_dir, target_dir)
-      @source_dir = source_dir
-      @target_dir = target_dir
+    def initialize(context)
+      @context = context
     end
 
     def run
       STDOUT.puts "   Initial run (daemon mode)"
       process
       fsevent = FSEvent.new
-      fsevent.watch @source_dir do |directories|
+      fsevent.watch context.source_dir do |directories|
         STDOUT.puts "\n   Processing: #{directories.inspect}"
         process
         STDOUT.puts "   Done processing. "
@@ -26,7 +23,7 @@ module Trekky
     end
 
     def process
-      Processor.run(@source_dir, @target_dir)
+      Processor.run context
     end
 
   end

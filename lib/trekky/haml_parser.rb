@@ -23,7 +23,7 @@ module Trekky
     end
 
     def layout(name = "default")
-      File.join(source_dir, "layouts", "#{name}.haml")
+      File.join(context.source_dir, "layouts", "#{name}.haml")
     end
 
     def render(input, &block)

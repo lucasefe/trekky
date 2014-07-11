@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.unshift File.join(Dir.pwd, 'lib')
 require 'clap'
+require 'trekky/context'
 require 'trekky/processor'
 require 'trekky/daemon'
 
@@ -17,8 +18,10 @@ Clap.run ARGV,
     exit
   }
 
+context = Trekky::Context.new(source, target)
+
 if daemon 
-  Trekky::Daemon.run source, target
+  Trekky::Daemon.new(context).run
 else
-  Trekky::Processor.run source, target
+  Trekky::Processor.new(context).run
 end
