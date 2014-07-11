@@ -23,16 +23,16 @@ module Trekky
 
     private
 
+    def all_files
+      Dir.glob(File.join(source_dir, "**/*")).reject { |p| p.include?("#{source_dir}/layouts") }
+    end
+
     def haml(source)
-      HamlParser.new(source, source_dir, target_dir).render
+      HamlParser.new(source, source_dir, target_dir).run
     end
 
     def sass(source)
-      SassParser.new(source, source_dir, target_dir).render
-    end
-
-    def all_files
-      Dir.glob(File.join(source_dir, "**/*"))
+      SassParser.new(source, source_dir, target_dir).run
     end
 
   end

@@ -8,7 +8,7 @@ module Trekky
       @target_dir = target_dir
     end
 
-    def render
+    def run
       raise NotImplementedError
     end
 
