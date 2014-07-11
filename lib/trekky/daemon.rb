@@ -23,7 +23,7 @@ module Trekky
     end
 
     def process
-      Processor.run context
+      Processor.new(context).run
     end
 
   end
