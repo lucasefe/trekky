@@ -42,3 +42,6 @@ You'll end up having this:
 ## Deamon mode
 
 Monitors source dir for changes, and copy/process on demand to target dir. 
+    
+    trekky -d
+    
