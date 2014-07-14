@@ -1,55 +1,48 @@
-module Trekky
+require 'trekky/source'
+
+class Trekky
   class Context
 
-    attr_reader :source_dir, :target_dir
+    attr_reader :source_dir
 
-    def initialize(source_dir, target_dir)
+    def initialize(source_dir)
       @source_dir = source_dir
-      @target_dir = target_dir
+      @files = { layouts: [], partials: [], sources: [] }
+      build
     end
 
-    def sources(reload = false)
-      reset_files if reload
-      files[:sources]
+    def sources
+      @files[:sources]
     end
 
     def partials
-      files[:partials]
+      @files[:partials]
     end
 
     def layouts
-      files[:layouts]
+      @files[:layouts]
     end
 
-    def reset_files
-      @files = nil
-    end
+    private
 
-    def files
-      @files ||= begin
-        dict = Hash.new
-        dict.default_proc = proc { |hash, key| hash[key] = []}
-        all_files.each do |path|
-          next if File.directory?(path)
+    def build
+      Dir.glob(File.join(source_dir, "**/*")).each do |path|
+        
+        next if File.directory?(path)
+        source = Source.new(self, path)
 
-          if path.include?("#{source_dir}/layouts")
-            dict[:layouts] << path
-            next
-          end
-
-          if File.basename(path)[0] == '_'
-            dict[:partials] << path
-            next
-          end
-
-          dict[:sources] << path
+        if path.include?("#{source_dir}/layouts")
+          @files[:layouts] << source
+          next
         end
-        dict
-      end
-    end
 
-    def all_files
-      Dir.glob(File.join(source_dir, "**/*"))
+        if File.basename(path)[0] == '_'
+          @files[:partials] << source
+          next
+        end
+
+        @files[:sources] << source
+      end
     end
 
   end

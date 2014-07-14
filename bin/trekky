@@ -1,9 +1,8 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.unshift File.join(Dir.pwd, 'lib')
 require 'clap'
-require 'trekky/context'
-require 'trekky/processor'
-require 'trekky/daemon'
+require 'rb-fsevent'
+require 'trekky'
 
 source = 'source'
 target = 'public'
@@ -18,10 +17,17 @@ Clap.run ARGV,
     exit
   }
 
-context = Trekky::Context.new(source, target)
+trekky = Trekky.new(source)
 
-if daemon 
-  Trekky::Daemon.new(context).run
+unless daemon 
+  trekky.render_to(target)
 else
-  Trekky::Processor.new(context).run
+  STDOUT.puts "-> Initial run (daemon mode)"
+  trekky.render_to(target)
+  fsevent = FSEvent.new
+  fsevent.watch source do |directories|
+    trekky.render_to(target)
+    STDOUT.puts "-> Done processing. "
+  end
+  fsevent.run
 end
