@@ -4,19 +4,21 @@ require 'trekky/source'
 class Trekky
   class HamlSource < Source
 
+    attr_reader :regions
+
     def initialize(context, path)
       super
-      @regions = {}      
+      @regions = {}
     end
-    
+
     def render(options = {}, &block)
       if block_given? || options[:layout] == false
         render_input(&block)
       else
         output = render_input
         layout.render do |name|
-          if @regions.has_key?(name)
-            @regions[name].call
+          if regions.has_key?(name)
+            regions[name]
           else
             output
           end
@@ -24,7 +26,6 @@ class Trekky
       end
     rescue Exception => error
       render_error(error)
-      nil
     end
 
     def partial(name)
@@ -38,7 +39,7 @@ class Trekky
 
     def content_for(name, &block)
       return unless block_given?
-      @regions[name] = block 
+      regions[name] = capture_haml(&block)
     end
 
     def type
@@ -55,10 +56,6 @@ class Trekky
       {}
     end
 
-    def inception?
-      layout == @source
-    end
-
     def layout
       @context.layouts.first
     end
@@ -68,6 +65,7 @@ class Trekky
       e.backtrace.each do |line|
         STDERR.puts "  #{line}"
       end
+      nil
     end
 
   end
