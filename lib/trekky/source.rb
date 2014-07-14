@@ -1,7 +1,3 @@
-require 'trekky/haml_processor'
-require 'trekky/null_processor'
-require 'trekky/sass_processor'
-
 class Trekky
 
   class Source
@@ -12,15 +8,7 @@ class Trekky
     end
 
     def render(&block)
-      processor.render(&block)
-    end
-
-    def processor
-      @processor ||= find_processor.new(self)
-    end
-    
-    def find_processor
-      processors[type] || default_processor      
+      raise NotImplementedError      
     end
 
     def path
@@ -41,14 +29,6 @@ class Trekky
 
     def input
       File.read(path)
-    end
-
-    def processors
-      { sass: SassProcessor, haml: HamlProcessor }
-    end
-
-    def default_processor
-      NullProcessor
     end
 
   end

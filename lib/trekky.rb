@@ -21,7 +21,7 @@ class Trekky
 
   def target_path(target_dir, source)
     path = File.join(target_dir, source.path.gsub(source_dir, ''))
-    if type = source.processor.type
+    if type = source.type
       path.gsub(/\.#{type}/, '')
     else
       path

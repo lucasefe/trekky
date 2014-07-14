@@ -1,11 +1,8 @@
 require 'haml'
+require 'trekky/source'
 
 class Trekky
-  class HamlProcessor
-
-    def initialize(source)
-      @source = source
-    end
+  class HamlSource < Source
     
     def render(&block)
       if block_given?
@@ -38,16 +35,12 @@ class Trekky
       {}
     end
 
-    def input
-      @source.input
-    end
-
     def inception?
       layout == @source
     end
 
     def layout
-      @source.context.layouts.first
+      @context.layouts.first
     end
 
     def render_error(e)

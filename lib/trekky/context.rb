@@ -1,4 +1,6 @@
-require 'trekky/source'
+require 'trekky/haml_source'
+require 'trekky/static_source'
+require 'trekky/sass_source'
 
 class Trekky
   class Context
@@ -29,7 +31,8 @@ class Trekky
       Dir.glob(File.join(source_dir, "**/*")).each do |path|
         
         next if File.directory?(path)
-        source = Source.new(self, path)
+
+        source = build_source(path)
 
         if path.include?("#{source_dir}/layouts")
           @files[:layouts] << source
@@ -43,6 +46,19 @@ class Trekky
 
         @files[:sources] << source
       end
+    end
+
+    def build_source(path)
+      type = File.extname(path)[1..-1].intern
+      find_source_class(type).new(self, path)
+    end
+
+    def find_source_class(type)
+      types[type] || StaticSource
+    end
+
+    def types
+      { sass: SassSource, haml: HamlSource }
     end
 
   end
