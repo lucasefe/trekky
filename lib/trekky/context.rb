@@ -25,6 +25,10 @@ class Trekky
       @files[:layouts]
     end
 
+    def find_partial(name)
+      partials.find {|p| p.path == File.join(source_dir, name)}
+    end
+
     private
 
     def build
