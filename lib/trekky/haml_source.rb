@@ -22,7 +22,7 @@ class Trekky
     private
 
     def render_input(&block)
-      Haml::Engine.new(input).render(&block)
+      Haml::Engine.new(input).render(self, locals, &block)
     end
 
     def locals
