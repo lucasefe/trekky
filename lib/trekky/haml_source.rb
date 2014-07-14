@@ -3,12 +3,24 @@ require 'trekky/source'
 
 class Trekky
   class HamlSource < Source
+
+    def initialize(context, path)
+      super
+      @regions = {}      
+    end
     
     def render(options = {}, &block)
       if block_given? || options[:layout] == false
         render_input(&block)
       else
-        layout.render { render_input }
+        output = render_input
+        layout.render do |name|
+          if @regions.has_key?(name)
+            @regions[name].call
+          else
+            output
+          end
+        end
       end
     rescue Exception => error
       render_error(error)
@@ -20,8 +32,13 @@ class Trekky
       if source
         source.render(layout: false)
       else
-        STDERR.puts "!> Can't find partial: #{name}"
+        STDERR.puts "[ERROR] Can't find partial: #{name}"
       end
+    end
+
+    def content_for(name, &block)
+      return unless block_given?
+      @regions[name] = block 
     end
 
     def type
