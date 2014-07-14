@@ -5,16 +5,10 @@ class Trekky
   class HamlSource < Source
     
     def render(&block)
-      if block_given?
-        render_input(&block)
+      unless block_given?
+        layout.render { render_input }
       else
-        unless inception?
-          layout.render do
-            render_input
-          end
-        else
-          render_input
-        end
+        render_input(&block)
       end
     rescue Exception => error
       render_error(error)
