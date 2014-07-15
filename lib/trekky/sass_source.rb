@@ -1,15 +1,16 @@
 require_relative 'source'
 require 'sass'
 
-class Trekky 
+class Trekky
   class SassSource < Source
 
     def render
-      Sass::Engine.new(input, :syntax => :sass).render
+      Sass.load_paths << @context.source_dir
+      Sass::Engine.new(input, options).render
     end
-	
-  	def type
-      :sass
+
+    def options
+      { :syntax => :sass }
     end
 
   end
