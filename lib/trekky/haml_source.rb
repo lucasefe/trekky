@@ -16,12 +16,16 @@ class Trekky
         render_input(&block)
       else
         output = render_input
-        layout.render do |name|
-          if regions.has_key?(name)
-            regions[name]
-          else
-            output
+        if layout
+          layout.render do |name|
+            if regions.has_key?(name)
+              regions[name]
+            else
+              output
+            end
           end
+        else
+          output
         end
       end
     rescue Exception => error
