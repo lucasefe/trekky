@@ -1,5 +1,5 @@
 require 'fileutils'
-require 'trekky/context'
+require_relative 'trekky/context'
 
 class Trekky
 

@@ -1,4 +1,4 @@
-require 'trekky/source'
+require_relative 'source'
 require 'sass'
 
 class Trekky 

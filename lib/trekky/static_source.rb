@@ -1,5 +1,5 @@
 require 'haml'
-require 'trekky/source'
+require_relative 'source'
 
 class Trekky
   class StaticSource < Source
@@ -9,7 +9,7 @@ class Trekky
     end
 
     def type
-      
+
     end
 
   end

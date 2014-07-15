@@ -1,5 +1,5 @@
 require 'haml'
-require 'trekky/source'
+require_relative 'source'
 
 class Trekky
   class HamlSource < Source

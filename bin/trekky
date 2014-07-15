@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
-$LOAD_PATH.unshift File.join(Dir.pwd, 'lib')
 require 'clap'
 require 'rb-fsevent'
-require 'trekky'
+require_relative '../lib/trekky'
 
 source = 'source'
 target = 'public'

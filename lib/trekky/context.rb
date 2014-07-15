@@ -1,6 +1,6 @@
-require 'trekky/haml_source'
-require 'trekky/static_source'
-require 'trekky/sass_source'
+require_relative 'haml_source'
+require_relative 'static_source'
+require_relative 'sass_source'
 
 class Trekky
   class Context
@@ -33,7 +33,7 @@ class Trekky
 
     def build
       Dir.glob(File.join(source_dir, "**/*")).each do |path|
-        
+
         next if File.directory?(path)
 
         source = build_source(path)
