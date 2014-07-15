@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name              = "trekky"
-  s.version           = "0.0.3"
+  s.version           = "0.0.4"
   s.summary           = "Simple, very simple, sass and haml compiler for dear designer friend."
   s.description       = "Simple, very simple, sass and haml compiler."
   s.authors           = ["Lucas Florio"]
