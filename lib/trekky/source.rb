@@ -31,6 +31,7 @@ class Trekky
     end
 
     def add_error(error)
+      STDOUT.puts "ERROR: #{error.message} (#{path})"
       @errors << error
       nil
     end

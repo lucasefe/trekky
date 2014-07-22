@@ -17,7 +17,6 @@ class Trekky
       Sass.load_paths << @context.source_dir
       @output = Sass::Engine.new(input, options).render
     rescue Exception => error
-      STDOUT.puts "Adding error: #{error.message}"
       add_error error
     end
 
