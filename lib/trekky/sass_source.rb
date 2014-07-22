@@ -7,6 +7,8 @@ class Trekky
     def render
       Sass.load_paths << @context.source_dir
       Sass::Engine.new(input, options).render
+    rescue Exception => error
+      raise CanNotRenderError, error
     end
 
     def options

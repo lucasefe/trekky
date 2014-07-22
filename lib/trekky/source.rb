@@ -2,13 +2,27 @@ class Trekky
 
   class Source
 
+    class CanNotRenderError < StandardError
+      def initialize(exception)
+        @exception = exception
+      end
+
+      def backtrace
+        @exception.backtrace
+      end
+
+      def message
+        @exception.message
+      end
+    end
+
     def initialize(context, path)
       @path = path
       @context = context
     end
 
     def render(&block)
-      raise NotImplementedError      
+      raise NotImplementedError
     end
 
     def path

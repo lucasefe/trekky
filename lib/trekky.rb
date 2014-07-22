@@ -9,9 +9,17 @@ class Trekky
 
   def render_to(target_dir)
     @context.sources.each do |source|
-      output = source.render
-      path = target_path(target_dir, source)
+      begin
+        output = source.render
+      rescue Source::CanNotRenderError => exception
+        STDERR.puts "[Error] #{exception.message}"
+        output = render_exception(exception)
+        if source.type == :haml
+          output = "<pre>#{output}</pre>"
+        end
+      end
 
+      path = target_path(target_dir, source)
       STDOUT.puts "Writing #{source.path} to #{path}"
       write(output, path)
     end
@@ -35,6 +43,14 @@ class Trekky
 
   def source_dir
     @context.source_dir
+  end
+
+  def render_exception(exception)
+    data = [exception.message]
+    exception.backtrace.each do |line|
+      data << "  #{line}"
+    end
+    data.join("\n")
   end
 
 end

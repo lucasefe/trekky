@@ -29,7 +29,7 @@ class Trekky
         end
       end
     rescue Exception => error
-      render_error(error)
+      raise CanNotRenderError, error
     end
 
     def partial(name)
@@ -64,14 +64,5 @@ class Trekky
       @context.layouts.first
     end
 
-    def render_error(e)
-      STDERR.puts "Error #{e.message}"
-      e.backtrace.each do |line|
-        STDERR.puts "  #{line}"
-      end
-      nil
-    end
-
   end
-
 end
