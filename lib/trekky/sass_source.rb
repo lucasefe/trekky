@@ -5,10 +5,12 @@ class Trekky
   class SassSource < Source
 
     def render
+      clear_errors
       Sass.load_paths << @context.source_dir
-      Sass::Engine.new(input, options).render
+      @output = Sass::Engine.new(input, options).render
     rescue Exception => error
-      raise CanNotRenderError, error
+      STDOUT.puts "Adding error: #{error.message}"
+      add_error error
     end
 
     def options

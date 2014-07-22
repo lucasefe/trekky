@@ -12,24 +12,26 @@ class Trekky
     end
 
     def render(options = {}, &block)
-      if block_given? || options[:layout] == false
+      clear_errors
+      @output = if block_given? || options[:layout] == false
         render_input(&block)
       else
-        output = render_input
+        buffer = render_input
         if layout
           layout.render do |name|
             if regions.has_key?(name)
               regions[name]
             else
-              output
+              buffer
             end
           end
         else
-          output
+          buffer
         end
       end
     rescue Exception => error
-      raise CanNotRenderError, error
+      STDOUT.puts "Adding error: #{error.message}"
+      add_error error
     end
 
     def partial(name)

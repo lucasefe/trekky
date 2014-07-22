@@ -5,7 +5,8 @@ class Trekky
   class StaticSource < Source
 
     def render
-      input
+      clear_errors
+      @output = input
     end
 
     def type

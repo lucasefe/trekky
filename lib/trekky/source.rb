@@ -2,35 +2,20 @@ class Trekky
 
   class Source
 
-    class CanNotRenderError < StandardError
-      def initialize(exception)
-        @exception = exception
-      end
-
-      def backtrace
-        @exception.backtrace
-      end
-
-      def message
-        @exception.message
-      end
-    end
+    attr_reader :output, :context, :path, :errors
 
     def initialize(context, path)
       @path = path
       @context = context
+      @errors = []
     end
 
     def render(&block)
       raise NotImplementedError
     end
 
-    def path
-      @path
-    end
-
-    def context
-      @context
+    def valid?
+      @errors.empty?
     end
 
     def type
@@ -45,5 +30,31 @@ class Trekky
       File.read(path)
     end
 
+    def add_error(error)
+      @errors << error
+      nil
+    end
+
+    def clear_errors
+      @errors = []
+    end
+
+    def render_errors
+      @errors.map do |error|
+        render_error(error)
+      end.join("<br/>")
+    end
+
+    def render_error(error)
+      Haml::Engine.new(<<-INPUT.gsub(" "*8, "")).render(self, {error: error})
+        %h1 File: #{path}
+        %h3 Error: #{error.message}
+        %pre
+          %code
+            - error.backtrace.each do |line|
+              = line
+              %br
+      INPUT
+    end
   end
 end
