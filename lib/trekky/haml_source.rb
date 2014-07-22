@@ -9,6 +9,7 @@ class Trekky
     def initialize(context, path)
       super
       @regions = {}
+      @env = {}
     end
 
     def render(options = {}, &block)
@@ -19,10 +20,10 @@ class Trekky
         buffer = render_input
         if layout
           layout.render do |name|
-            if regions.has_key?(name)
-              regions[name]
-            else
+            if region.nil?
               buffer
+            elsif regions.has_key?(name)
+              regions[name]
             end
           end
         else
@@ -30,7 +31,6 @@ class Trekky
         end
       end
     rescue Exception => error
-      STDOUT.puts "Adding error: #{error.message}"
       add_error error
     end
 
