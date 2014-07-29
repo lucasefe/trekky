@@ -24,7 +24,8 @@ else
   STDOUT.puts "-> Initial run (daemon mode)"
   trekky.render_to(target)
   fsevent = FSEvent.new
-  fsevent.watch source do |directories|
+  # TODO: Use yielded directories to only process some changes files, and not the whole source dir. 
+  fsevent.watch(source) do 
     trekky.render_to(target)
     STDOUT.puts "-> Done processing. "
   end
