@@ -20,7 +20,7 @@ class Trekky
         buffer = render_input
         if layout
           layout.render do |name|
-            if region.nil?
+            if name.nil?
               buffer
             elsif regions.has_key?(name)
               regions[name]
