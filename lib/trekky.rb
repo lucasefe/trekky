@@ -5,6 +5,10 @@ class Trekky
 
   def initialize(source_dir)
     @context = Context.new(source_dir)
+    if File.exists?(config_file)
+      STDOUT.puts "Loading config file: #{config_file}"
+      require config_file
+    end
   end
 
   def render_to(target_dir)
@@ -31,6 +35,10 @@ class Trekky
   def write(output, path)
     FileUtils.mkdir_p(File.dirname(path))
     File.open(path, "wb") {|f| f.write(output) }
+  end
+
+  def config_file
+    File.join(Dir.pwd, "config.rb")
   end
 
 end

@@ -12,14 +12,14 @@ class Trekky
       @env = {}
     end
 
-    def render(options = {}, &block)
+    def render(options = {}, locals = {}, &block)
       clear_errors
       @output = if block_given? || options[:layout] == false
-        render_input(&block)
+        render_input(locals, &block)
       else
         buffer = render_input
         if layout
-          layout.render do |name|
+          layout.render({}, locals) do |name|
             if name.nil?
               buffer
             elsif regions.has_key?(name)
@@ -34,10 +34,10 @@ class Trekky
       add_error error
     end
 
-    def partial(name)
+    def partial(name, locals = {})
       source = context.find_partial(name)
       if source
-        source.render(layout: false)
+        source.render({layout: false}, locals)
       else
         STDERR.puts "[ERROR] Can't find partial: #{name}"
       end
@@ -54,12 +54,8 @@ class Trekky
 
     private
 
-    def render_input(&block)
+    def render_input(locals = {}, &block)
       Haml::Engine.new(input).render(self, locals, &block)
-    end
-
-    def locals
-      {}
     end
 
     def layout
