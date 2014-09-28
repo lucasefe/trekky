@@ -10,6 +10,10 @@ class Trekky
       @errors = []
     end
 
+    def data
+      @context.data
+    end
+
     def render(&block)
       raise NotImplementedError
     end

@@ -5,6 +5,7 @@ class Trekky
 
   def initialize(source_dir)
     @context = Context.new(source_dir)
+
     if File.exists?(config_file)
       STDOUT.puts "Loading config file: #{config_file}"
       require config_file

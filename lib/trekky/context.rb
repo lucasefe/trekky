@@ -1,6 +1,7 @@
+require_relative 'data'
 require_relative 'haml_source'
-require_relative 'static_source'
 require_relative 'sass_source'
+require_relative 'static_source'
 
 class Trekky
   class Context
@@ -27,6 +28,10 @@ class Trekky
 
     def find_partial(name)
       partials.find {|p| p.path == File.join(source_dir, name)}
+    end
+
+    def data
+      @data ||= Data.new(data_path)
     end
 
     private
@@ -64,6 +69,11 @@ class Trekky
     def types
       { sass: SassSource, haml: HamlSource }
     end
+
+    def data_path
+      File.join(Dir.pwd, 'data')
+    end
+
 
   end
 end

@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name              = "trekky"
-  s.version           = "0.0.7.rc1"
+  s.version           = "0.0.7.rc2"
   s.summary           = "Simple, very simple, sass and haml compiler for dear designer friend."
   s.description       = "Simple, very simple, sass and haml compiler."
   s.authors           = ["Lucas Florio"]
@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
                           "bin/trekky", 
                           "lib/trekky.rb", 
                           "lib/trekky/context.rb", 
+                          "lib/trekky/data.rb", 
                           "lib/trekky/haml_source.rb", 
                           "lib/trekky/sass_source.rb", 
                           "lib/trekky/source.rb", 
