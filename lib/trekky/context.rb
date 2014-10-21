@@ -33,6 +33,17 @@ class Trekky
       end
     end
 
+    def find_layout(name)
+      layout = layouts.find do |path| 
+        layout_path = source_dir + "layouts/#{name}"
+        path == layout_path
+      end
+
+      if layout
+        build_source(layout)
+      end
+    end
+
     def data
       @data ||= Data.new(data_path)
     end

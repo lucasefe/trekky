@@ -1,13 +1,17 @@
+# encoding: UTF-8
+
 class Trekky
 
   class Source
 
     attr_reader :output, :context, :path, :errors
+    attr_reader :body, :header
 
     def initialize(context, path)
       @path = path
       @context = context
       @errors = []
+      read
     end
 
     def data
@@ -30,18 +34,22 @@ class Trekky
       File.extname(path)
     end
 
-    def input
-      File.read(path)
+    def read
+      @header, @body = read_file
     end
 
     def add_error(error)
-      STDOUT.puts "ERROR: #{error.message} (#{path})"
+      STDOUT.puts "ERROR: #{error.message} (#{path}) -> #{error.backtrace.first}"
       @errors << error
       nil
     end
 
     def clear_errors
       @errors = []
+    end
+
+    def read_file
+      return {}, File.read(path)
     end
 
     def render_errors

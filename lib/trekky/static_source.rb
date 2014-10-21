@@ -6,7 +6,7 @@ class Trekky
 
     def render
       clear_errors
-      @output = input
+      @output = body
     end
 
     def type

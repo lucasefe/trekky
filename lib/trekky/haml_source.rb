@@ -55,11 +55,22 @@ class Trekky
     private
 
     def render_input(locals = {}, &block)
-      Haml::Engine.new(input).render(self, locals, &block)
+      Haml::Engine.new(body).render(self, locals, &block)
     end
 
     def layout
-      @context.layout
+      name = header["layout"] || 'default.haml' 
+      context.find_layout(name)
+    end
+
+    def read_file
+      regexp = /\A(---\s*\n.*?\n?)^((---|\.\.\.)\s*$\n?)/m
+      content = File.read(path)
+      if m = regexp.match(content)
+        return YAML.load(m[0]), m.post_match
+      else
+        return {}, content
+      end
     end
 
   end

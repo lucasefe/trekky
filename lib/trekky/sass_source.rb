@@ -15,14 +15,14 @@ class Trekky
     def render
       clear_errors
       Sass.load_paths << @context.source_dir
-      @output = Sass::Engine.new(input, options).render
+      @output = Sass::Engine.new(body, options).render
     rescue Exception => error
       add_error error
     end
 
     def render_error(error)
-      input = error.message.to_s.gsub(HTML_ESCAPE_ONCE_REGEXP, HTML_ESCAPE)
-      sprintf('body::before{ content:"%s" }', input)
+      text = error.message.to_s.gsub(HTML_ESCAPE_ONCE_REGEXP, HTML_ESCAPE)
+      sprintf('body::before{ content:"%s" }', text)
     end
 
     def options
