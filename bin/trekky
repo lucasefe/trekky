@@ -16,6 +16,7 @@ Clap.run ARGV,
     exit
   }
 
+
 trekky = Trekky.new(source)
 
 unless daemon 

@@ -59,7 +59,7 @@ class Trekky
     end
 
     def layout
-      @context.layouts.first
+      @context.layout
     end
 
   end

@@ -13,7 +13,9 @@ class Trekky
   end
 
   def render_to(target_dir)
-    @context.sources.each do |source|
+    target_dir = Pathname.new(target_dir).expand_path
+
+    @context.each_source do |source|
       path = target_path(target_dir, source)
       output = source.render
       output = source.render_errors unless source.valid?
@@ -25,7 +27,7 @@ class Trekky
   private
 
   def target_path(target_dir, source)
-    path = File.join(target_dir, source.path.gsub(@context.source_dir, ''))
+    path = File.join(target_dir, source.path.to_s.gsub(@context.source_dir.to_s, ''))
     if type = source.type
       path.gsub(/\.#{type}/, '')
     else

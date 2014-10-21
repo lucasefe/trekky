@@ -1,3 +1,4 @@
+require 'pathname'
 require_relative 'data'
 require_relative 'haml_source'
 require_relative 'sass_source'
@@ -9,52 +10,64 @@ class Trekky
     attr_reader :source_dir
 
     def initialize(source_dir)
-      @source_dir = source_dir
-      @files = { layouts: [], partials: [], sources: [] }
-      build
+      @source_dir = Pathname.new(source_dir).expand_path
     end
 
-    def sources
-      @files[:sources]
+    def each_source
+      files[:sources].each do |path|
+        yield build_source(path)
+      end
     end
 
     def partials
-      @files[:partials]
+      files[:partials]
     end
 
     def layouts
-      @files[:layouts]
+      files[:layouts]
     end
 
     def find_partial(name)
-      partials.find {|p| p.path == File.join(source_dir, name)}
+      if partial = partials.find { |path| path == (source_dir + name) }
+        build_source(partial)
+      end
     end
 
     def data
       @data ||= Data.new(data_path)
     end
 
+    def layout
+      if path = layouts.first
+        build_source(path)
+      end
+    end
+
     private
 
-    def build
-      Dir.glob(File.join(source_dir, "**/*")).each do |path|
+    def files
+      @files ||= find_files
+    end
 
-        next if File.directory?(path)
+    def find_files
+      all_files = { layouts: [], partials: [], sources: [] }
 
-        source = build_source(path)
-
-        if path.include?("#{source_dir}/layouts")
-          @files[:layouts] << source
-          next
+      paths.inject(all_files) do |hash, path|
+        unless path.directory?
+          if path.to_s.include?("#{source_dir}/layouts")
+            hash[:layouts].push(path)
+          elsif path.basename.to_s[0] == '_'
+            hash[:partials].push(path)
+          else
+            hash[:sources].push(path)
+          end
         end
-
-        if File.basename(path)[0] == '_'
-          @files[:partials] << source
-          next
-        end
-
-        @files[:sources] << source
+        hash
       end
+    end
+
+    def paths
+      Pathname.glob(source_dir + "**/*")
     end
 
     def build_source(path)
@@ -73,7 +86,6 @@ class Trekky
     def data_path
       File.join(Dir.pwd, 'data')
     end
-
 
   end
 end
