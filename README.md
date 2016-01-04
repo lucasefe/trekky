@@ -1,3 +1,7 @@
+Deprecated
+==========
+Use [https://middlemanapp.com/](https://middlemanapp.com/) Makes no sense to maintain it. 
+
 trekky
 ======
 
