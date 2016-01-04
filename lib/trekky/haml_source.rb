@@ -3,7 +3,6 @@ require_relative 'source'
 
 class Trekky
   class HamlSource < Source
-
     attr_reader :regions
 
     def initialize(context, path)
@@ -15,20 +14,20 @@ class Trekky
     def render(options = {}, locals = {}, &block)
       clear_errors
       @output = if block_given? || options[:layout] == false
-        render_input(locals, &block)
-      else
-        buffer = render_input
-        if layout
-          layout.render({}, locals) do |name|
-            if name.nil?
-              buffer
-            elsif regions.has_key?(name)
-              regions[name]
-            end
-          end
-        else
-          buffer
-        end
+                  render_input(locals, &block)
+                else
+                  buffer = render_input
+                  if layout
+                    layout.render({}, locals) do |name|
+                      if name.nil?
+                        buffer
+                      elsif regions.key?(name)
+                        regions[name]
+                      end
+                    end
+                  else
+                    buffer
+                  end
       end
     rescue Exception => error
       add_error error
@@ -37,7 +36,7 @@ class Trekky
     def partial(name, locals = {})
       source = context.find_partial(name)
       if source
-        source.render({layout: false}, locals)
+        source.render({ layout: false }, locals)
       else
         STDERR.puts "[ERROR] Can't find partial: #{name}"
       end
@@ -59,7 +58,7 @@ class Trekky
     end
 
     def layout
-      name = header["layout"] || 'default.haml' 
+      name = header['layout'] || 'default.haml'
       context.find_layout(name)
     end
 
@@ -72,6 +71,5 @@ class Trekky
         return {}, content
       end
     end
-
   end
 end

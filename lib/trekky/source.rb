@@ -1,9 +1,7 @@
 # encoding: UTF-8
 
 class Trekky
-
   class Source
-
     attr_reader :output, :context, :path, :errors
     attr_reader :body, :header
 
@@ -18,8 +16,8 @@ class Trekky
       @context.data
     end
 
-    def render(&block)
-      raise NotImplementedError
+    def render(&_block)
+      fail NotImplementedError
     end
 
     def valid?
@@ -49,17 +47,17 @@ class Trekky
     end
 
     def read_file
-      return {}, File.read(path)
+      [{}, File.read(path)]
     end
 
     def render_errors
       @errors.map do |error|
         render_error(error)
-      end.join("<br/>")
+      end.join('<br/>')
     end
 
     def render_error(error)
-      Haml::Engine.new(<<-INPUT.gsub(" "*8, "")).render(self, {error: error})
+      Haml::Engine.new(<<-INPUT.gsub(' ' * 8, '')).render(self, error: error)
         %h1 File: #{path}
         %h3 Error: #{error.message}
         %pre

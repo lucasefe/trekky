@@ -6,7 +6,6 @@ require_relative 'static_source'
 
 class Trekky
   class Context
-
     attr_reader :source_dir
 
     def initialize(source_dir)
@@ -34,14 +33,12 @@ class Trekky
     end
 
     def find_layout(name)
-      layout = layouts.find do |path| 
+      layout = layouts.find do |path|
         layout_path = source_dir + "layouts/#{name}"
         path == layout_path
       end
 
-      if layout
-        build_source(layout)
-      end
+      build_source(layout) if layout
     end
 
     def data
@@ -78,7 +75,7 @@ class Trekky
     end
 
     def paths
-      Pathname.glob(source_dir + "**/*")
+      Pathname.glob(source_dir + '**/*')
     end
 
     def build_source(path)
@@ -97,6 +94,5 @@ class Trekky
     def data_path
       File.join(Dir.pwd, 'data')
     end
-
   end
 end

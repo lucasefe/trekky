@@ -7,28 +7,27 @@ source = 'source'
 target = 'public'
 daemon = false
 
-Clap.run ARGV, 
-  "-s" => lambda {|s| source = s },
-  "-t" => lambda {|t| target = t },
-  "-d" => lambda { daemon = true },
-  "-h" => lambda {
-    puts "usage: trekky [-h] [-s source] [-t target]"
-    exit
-  }
-
+Clap.run ARGV,
+         '-s' => ->(s) { source = s },
+         '-t' => ->(t) { target = t },
+         '-d' => -> { daemon = true },
+         '-h' => lambda {
+           puts 'usage: trekky [-h] [-s source] [-t target]'
+           exit
+         }
 
 trekky = Trekky.new(source)
 
-unless daemon 
+unless daemon
   trekky.render_to(target)
 else
-  STDOUT.puts "-> Initial run (daemon mode)"
+  STDOUT.puts '-> Initial run (daemon mode)'
   trekky.render_to(target)
   fsevent = FSEvent.new
-  # TODO: Use yielded directories to only process some changes files, and not the whole source dir. 
-  fsevent.watch(source) do 
+  # TODO: Use yielded directories to only process some changes files, and not the whole source dir.
+  fsevent.watch(source) do
     trekky.render_to(target)
-    STDOUT.puts "-> Done processing. "
+    STDOUT.puts '-> Done processing. '
   end
   fsevent.run
 end

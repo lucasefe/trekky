@@ -26,8 +26,7 @@ class Trekky
     end
 
     def options
-      { :syntax => :sass }
+      { syntax: :sass }
     end
-
   end
 end
